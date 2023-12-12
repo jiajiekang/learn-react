@@ -17,3 +17,93 @@ h2 {
   margin-top: 0;
   font-size: 20px;
 }
+
+form {
+  margin: 8px 0;
+}
+
+textarea {
+  display: block;
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #3a6070;
+  color: whitesmoke;
+  padding: 3px 10px;
+  border-color: transparent;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+button:hover {
+  /*background-color: #555;*/
+  background-color: #D7CCC8;
+  color: #424242
+}
+
+.reset {
+  background-color: whitesmoke;
+  color: #424242;
+  border-color: darkgray;
+}
+
+.search {
+  margin: 0 5px;
+  padding: 5px 12px;
+}
+
+.check-btn {
+  background-color: #3E2723;
+}
+
+.plf-btn {
+  margin: 10px 0;
+}
+
+.storage {
+  background-color: #BA68C8;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  vertical-align: -1px;
+  margin-right: 1px;
+}
+
+input[type="text"] {
+  width: 200px;
+}
+
+fieldset {
+  width: fit-content;
+  border: 1px solid #e3e3e3;
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table th {
+  text-align: left;
+  background-color: #3a6070;
+  color: #fff;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+table td {
+  border: 1px solid #e3e3e3;
+  padding: 4px 8px;
+  font-size: 10px;
+}
+
+table tr:nth-child(odd) td {
+  background-color: #e7edf0;
+}
+
