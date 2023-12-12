@@ -17,17 +17,18 @@ export default function Dtone() {
 
     const url = "http://localhost:3900/number";
 
-    const handleFunc = (data) => {
+    const handleFunc = data => {
       if (data.status !== 200) {
         ids = "Error";
+        throw new Error(data.result);
       }
       const entries = Object.entries(JSON.parse(data.result));
       const result = [];
       for (const [key, value] of entries) {
         result.push(
           <li key={key}>
-            <strong>{key}:</strong> {value}{" "}
-          </li>,
+            <strong>{key}:</strong> {value}
+          </li>
         );
       }
       setResults({ ids, display: "Operator", result });
@@ -38,7 +39,7 @@ export default function Dtone() {
 
   return (
     <>
-      <h1 className="title">Search Input</h1>
+      <h1 className='title'>Search Input</h1>
       <InputID ids={ids} onIdsChange={handleInput} onResults={handleResults} />
       <Results results={results} />
     </>
@@ -52,16 +53,16 @@ function InputID({ ids, onIdsChange, onResults }) {
         Input the texts including IDs
         <textarea
           values={ids}
-          onChange={(e) => onIdsChange(e.target.value)}
-          rows="5"
-          cols="60"
-          placeholder="+8613901007871"
+          onChange={e => onIdsChange(e.target.value)}
+          rows='5'
+          cols='60'
+          placeholder='+8613901007871'
         />
-        <button onClick={() => onIdsChange("")} className="reset" type="reset">
+        <button onClick={() => onIdsChange("")} className='reset' type='reset'>
           Reset
         </button>
         <HandleNlp onResults={onResults} />
-        <button className="storage load-ids" type="button">
+        <button className='storage load-ids' type='button'>
           Load
         </button>
       </label>
@@ -73,14 +74,10 @@ function Results({ results }) {
   const { ids, display, result } = results;
 
   return (
-    <div className="show">
+    <div className='show'>
       <p>{ids}</p>
       <p>{display}</p>
-      <div className="result">
-        {result}
-        <br />
-        <br />
-      </div>
+      <div className='result'>{result}</div>
     </div>
   );
 }

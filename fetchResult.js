@@ -5,25 +5,25 @@ export default function fetchResult(url, body, handleFunc, errorTitle, setResult
     headers: { "Content-Type": "application/json" },
   });
 
+  const displayError = (ids, display) => {
+    if (ids.includes("HTTP Error")) {
+      setResults({ ids, display, result: "Please check the input and try again." });
+    } else if (ids.includes("Invalid Number")) {
+      setResults({ ids, display, result: "Please check the number and try again." });
+    } else {
+      setResults({ ids, display, result: "Please start the express server first." });
+    }
+  };
+
   response
-    .then((res) => {
+    .then(res => {
       setResults({ ids: "Loading...", display: "", result: "" });
       return res.json();
     })
-    .then((data) => {
+    .then(data => {
       handleFunc(data);
     })
-    .catch((e) => {
+    .catch(e => {
       displayError(e.message, errorTitle);
     });
-
-  const displayError = (msg, title) => {
-    if (msg.includes("HTTP Error")) {
-      setResults(msg, title, "Please check the input and try again.");
-    } else if (msg.includes("Invalid Number")) {
-      setResults(msg, title, "Please check the number and try again.");
-    } else {
-      setResults(msg, title, "Please start the express server first.");
-    }
-  };
 }
