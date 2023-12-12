@@ -21,23 +21,15 @@ export default function Dtone() {
       if (data.status !== 200) {
         ids = "Error";
       }
-      const { number, timezone, location, operator } = JSON.parse(data.result);
-      // const result = `<p>Number: ${number}</p><p>Timezone: ${timezone}</p>
-      {
-        /* <p>Location: ${location}</p><p>Operator: ${operator}</p>`; */
+      const entries = Object.entries(JSON.parse(data.result));
+      const result = [];
+      for (const [key, value] of entries) {
+        result.push(
+          <li key={key}>
+            <strong>{key}:</strong> {value}{" "}
+          </li>,
+        );
       }
-      const result = JSON.parse(data.result);
-      entries = Object.entries(result);
-
-      result = (
-        <ul>
-          {entires.map(([key, value]) => {
-            <li key={key}>
-              <strong>{key}:</strong> {value}
-            </li>;
-          })}
-        </ul>
-      );
       setResults({ ids, display: "Operator", result });
     };
 
@@ -54,7 +46,6 @@ export default function Dtone() {
 }
 
 function InputID({ ids, onIdsChange, onResults }) {
-  console.log(ids);
   return (
     <form>
       <label>
@@ -86,7 +77,7 @@ function Results({ results }) {
       <p>{ids}</p>
       <p>{display}</p>
       <div className="result">
-        <result />
+        {result}
         <br />
         <br />
       </div>
