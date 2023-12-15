@@ -4,6 +4,7 @@ import fetchResult from "./fetchResult";
 import HandleNlp from "./nlp/NlpHandler";
 import TrxColumn from "./trxColumn/TrxColumn";
 import Platforms from "./search/Platforms";
+import ExternalId from "./external/ExteralId";
 
 export default function Dtone() {
   let [ids, setIds] = useState("");
@@ -18,12 +19,41 @@ export default function Dtone() {
     { id: "pf1", checked: true, label: "DVS", value: "dvs" },
     { id: "pf2", checked: false, label: "Submitted", value: "submitted" },
     { id: "pf3", checked: false, label: "Airtime", value: "airtime" },
-    { id: "pf4", checked: false, label: "External", value: "exteral" },
+    { id: "pf4", checked: false, label: "External", value: "external" },
     { id: "pf5", checked: false, label: "SQL", value: "sql" },
   ]);
+  const [platform, setPlatform] = useState("");
+  const [exIdRegex, setExIdRegx] = useState("16\\d+");
+  const [externalIds, setExternalIds] = useState("");
 
   function handleInput(nextIds) {
     setIds(nextIds);
+  }
+
+  function handleNlp() {
+    ids = ids || "+8613901007871";
+    ids = "+" + ids.replace(/\D/g, "");
+
+    const url = "http://localhost:3900/number";
+
+    const handleFunc = (res) => {
+      if (res.status !== 200) {
+        ids = "Error";
+        throw new Error(data.result);
+      }
+      const entries = Object.entries(JSON.parse(res.result));
+      const result = [];
+      for (const [key, value] of entries) {
+        result.push(
+          <li key={key}>
+            <strong>{key}:</strong> {value}
+          </li>,
+        );
+      }
+      setResults({ ids, display: "Operator", result });
+    };
+
+    fetchResult(url, { ids }, handleFunc, "Operator", setResults);
   }
 
   function handleChecks(id, checked) {
@@ -48,52 +78,116 @@ export default function Dtone() {
   function handleOptions(id, checked) {
     const updatedOptions = options.map((option) => {
       if (option.id === id) {
+        setPlatform(option.value);
         return { ...option, checked };
       }
-      return option;
+      return { ...option, checked: false };
     });
 
     setOptions(updatedOptions);
   }
 
-  function handleSearch() {}
+  function handleSearch() {
+    const url = "http://localhost:3900/search";
 
-  function handleResults() {
-    ids = ids || "+8613901007871";
-    ids = "+" + ids.replace(/\D/g, "");
+    if (platform === "external") {
+      setIds(externalIds);
+    }
 
-    const url = "http://localhost:3900/number";
-
-    const handleFunc = (data) => {
-      if (data.status !== 200) {
+    const handleFunc = (res) => {
+      if (res.status !== 200) {
         ids = "Error";
-        throw new Error(data.result);
+        throw new Error(res.result);
       }
-      const entries = Object.entries(JSON.parse(data.result));
-      const result = [];
-      for (const [key, value] of entries) {
-        result.push(
-          <li key={key}>
-            <strong>{key}:</strong> {value}
-          </li>,
-        );
-      }
-      setResults({ ids, display: "Operator", result });
+
+      const data = res.result;
+      checkboxes.forEach((cb) => {
+        if (!cb.checked) {
+          const index = data[0].indexOf(cb.value);
+          if (index > -1) {
+            data.forEach((row) => row.splice(index, 1));
+          }
+        }
+      });
+
+      const ids = data
+        .slice(1)
+        .map((row) => row[0])
+        .join(",");
+
+      const [rowHeader, ...rowData] = data;
+
+      const header = rowHeader.map((cell) => <th key={cell}>{cell}</th>);
+      const rows = rowData.map((row) => (
+        <tr key={row[0]}>
+          {row.map((cell) => (
+            <td key={cell}>{cell}</td>
+          ))}
+        </tr>
+      ));
+
+      const result = (
+        <table>
+          <tbody>
+            <tr>{header}</tr>
+            {rows}
+          </tbody>
+        </table>
+      );
+
+      setResults({ ids, display: platform, result });
     };
 
-    fetchResult(url, { ids }, handleFunc, "Operator", setResults);
+    fetchResult(url, { ids, platform }, handleFunc, platform, setResults);
+  }
+
+  function handleExIdRegex(nextRegex) {
+    setExIdRegx(nextRegex);
+  }
+
+  function handleFilter() {
+    const url = "http://localhost:3900/filter";
+    const externalRegex = externalIds || "16\\d+";
+
+    const handleFunc = (res) => {
+      if (res.status !== 200) {
+        ids = "Error";
+        throw new Error(res.result);
+      }
+
+      const data = res.result;
+      const filteredIds = data
+        .split(",")
+        .map((id) => `'${id}'`)
+        .join(",");
+
+      setExternalIds(filteredIds);
+      setResults({ ids: filteredIds, display: "External IDs", result: data });
+    };
+
+    fetchResult(url, { ids, externalRegex }, handleFunc, platform, setResults);
   }
 
   return (
     <>
       <h1 className="title">Search Input</h1>
-      <InputID ids={ids} onIdsChange={handleInput} onResults={handleResults} />
+      <InputID ids={ids} onIdsChange={handleInput} onResults={handleNlp} />
       <TrxColumn
         checkboxes={checkboxes}
         onChangeCheck={handleChecks}
         onChangeSelectClear={handleSelectClear}
       />
-      <Platforms options={options} onOptions={handleOptions} onSearch={handleSearch} />
+      <Platforms
+        options={options}
+        onOptions={handleOptions}
+        onSearch={handleSearch}
+        className="platform"
+      />
+      <ExternalId
+        exIdRegex={exIdRegex}
+        onExIdChange={handleExIdRegex}
+        onFilter={handleFilter}
+      />
       <Results results={results} />
     </>
   );

@@ -8,10 +8,10 @@ export default function TrxColumn({ checkboxes, onChangeCheck, onChangeSelectCle
           <React.Fragment key={id}>
             <label>
               <input
-                onChange={(e) => onChangeCheck(id, e.target.checked)}
+                onChange={e => onChangeCheck(id, e.target.checked)}
                 value={value}
-                type="checkbox"
-                name="checkbox"
+                type='checkbox'
+                name='checkbox'
                 checked={checked}
               />
               {label}
@@ -21,15 +21,15 @@ export default function TrxColumn({ checkboxes, onChangeCheck, onChangeSelectCle
       })}
       <button
         onClick={() => onChangeSelectClear(false)}
-        class="check-btn clear-btn"
-        type="button"
+        className='check-btn clear-btn'
+        type='button'
       >
         Clear
       </button>
       <button
         onClick={() => onChangeSelectClear(true)}
-        class="check-btn select-btn"
-        type="button"
+        className='check-btn select-btn'
+        type='button'
       >
         Select All
       </button>
