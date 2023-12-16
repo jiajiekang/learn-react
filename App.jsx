@@ -1,3 +1,26 @@
+import { useState } from "react";
+
+export default function FilterableProductTable() {
+  const [filterText, setFilterText] = useState("");
+  const [inStockOnly, setInStockOnly] = useState(false);
+
+  return (
+    <div>
+      <SearchBar
+        filterText={filterText}
+        inStockOnly={inStockOnly}
+        onFilterTextChange={setFilterText}
+        onInStockOnlyChange={setInStockOnly}
+      />
+      <ProductTable
+        products={PRODUCTS}
+        filterText={filterText}
+        inStockOnly={inStockOnly}
+      />
+    </div>
+  );
+}
+
 function ProductCategoryRow({ category }) {
   return (
     <tr>
@@ -21,11 +44,19 @@ function ProductRow({ product }) {
   );
 }
 
-function ProductTable({ products }) {
+function ProductTable({ products, filterText, inStockOnly }) {
   const rows = [];
   let lastCategory = null;
 
   products.forEach((product) => {
+    if (product.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
+      return;
+    }
+
+    if (inStockOnly && !product.stocked) {
+      return;
+    }
+
     if (product.category !== lastCategory) {
       rows.push(
         <ProductCategoryRow category={product.category} key={product.category} />,
@@ -48,23 +79,24 @@ function ProductTable({ products }) {
   );
 }
 
-function SearchBar() {
+function SearchBar({ filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange }) {
   return (
     <form>
-      <input type="text" placeholder="Search..." />
+      <input
+        value={filterText}
+        onChange={(e) => onFilterTextChange(e.target.value)}
+        type="text"
+        placeholder="Search..."
+      />
       <label>
-        <input type="checkbox" /> Only show products in stock
+        <input
+          checked={inStockOnly}
+          onChange={(e) => onInStockOnlyChange(e.target.checked)}
+          type="checkbox"
+        />{" "}
+        Only show products in stock
       </label>
     </form>
-  );
-}
-
-export default function FilterableProductTable() {
-  return (
-    <div>
-      <SearchBar />
-      <ProductTable products={PRODUCTS} />
-    </div>
   );
 }
 
