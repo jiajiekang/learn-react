@@ -46,19 +46,4 @@ ul {
   padding-inline-start: 20px;
 }
 
-body {
-  padding: 5px
-}
-label {
-  display: block;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-th {
-  padding-top: 10px;
-}
-td {
-  padding: 2px;
-  padding-right: 40px;
-}
-
+img { margin: 0 10px 10px 0; height: 90px; }
