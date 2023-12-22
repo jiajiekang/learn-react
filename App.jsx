@@ -1,28 +1,19 @@
-const baseUrl = "https://i.imgur.com/";
-const person = {
-  name: "Gregorio Y. Zara",
-  imageId: "7vQD0fP",
-  imageSize: "s",
-  theme: {
-    backgroundColor: "black",
-    color: "pink",
-  },
-};
+import Avatar from "./Avatar";
 
-export default function TodoList() {
+function Card({ children }) {
+  return <div className="card">{children}</div>;
+}
+
+export default function Profile() {
   return (
-    <div style={person.theme}>
-      <h1>{person.name}'s Todos</h1>
-      <img
-        className="avatar"
-        src={baseUrl + person.imageId + person.imageSize + ".jpg"}
-        alt={person.name}
+    <Card>
+      <Avatar
+        size={100}
+        person={{
+          name: "Katsuko Saruhashi",
+          imageId: "YfeOqp2",
+        }}
       />
-      <ul>
-        <li>Improve the videophone</li>
-        <li>Prepare aeronautics lectures</li>
-        <li>Work on the alcohol-fuelled engine</li>
-      </ul>
-    </div>
+    </Card>
   );
 }

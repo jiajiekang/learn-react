@@ -46,4 +46,18 @@ ul {
   padding-inline-start: 20px;
 }
 
-img { margin: 0 10px 10px 0; height: 90px; }
+.card {
+  width: fit-content;
+  margin: 5px;
+  padding: 5px;
+  font-size: 20px;
+  text-align: center;
+  border: 1px solid #aaa;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.avatar {
+  margin: 20px;
+  border-radius: 50%;
+}
