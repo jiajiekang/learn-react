@@ -45,3 +45,16 @@ code {
 ul {
   padding-inline-start: 20px;
 }
+
+body {
+  text-align: center;
+}
+p {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-style: italic;
+}
+hr {
+  margin: 0 120px 0 120px;
+  border: 1px dashed #45c3d8;
+}
