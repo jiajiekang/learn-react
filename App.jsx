@@ -1,31 +1,16 @@
-function Card({ children }) {
-  return (
-    <div className="card">
-      <div className="card-content">{children}</div>
-    </div>
-  );
+function Item({ name, isPacked }) {
+  return <li className="item">{isPacked ? <del>{name + " ✔"}</del> : name}</li>;
 }
 
-export default function Profile() {
+export default function PackingList() {
   return (
-    <div>
-      <Card>
-        <h1>Photo</h1>
-        <img
-          className="avatar"
-          src="https://i.imgur.com/OKS67lhm.jpg"
-          alt="Aklilu Lemma"
-          width={100}
-          height={100}
-        />
-      </Card>
-      <Card>
-        <h1>About</h1>
-        <p>
-          Aklilu Lemma was a distinguished Ethiopian scientist who discovered a natural
-          treatment to schistosomiasis.
-        </p>
-      </Card>
-    </div>
+    <section>
+      <h1>Sally Ride's Packing List</h1>
+      <ul>
+        <Item isPacked={true} name="Space suit" />
+        <Item isPacked={true} name="Helmet with a golden leaf" />
+        <Item isPacked={false} name="Photo of Tam" />
+      </ul>
+    </section>
   );
 }
