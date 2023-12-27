@@ -1,18 +1,20 @@
-import { Fragment } from "react";
+import Profile from "./Profile";
 
-const poem = {
-  lines: ["I write, erase, rewrite", "Erase again, and then", "A poppy blooms."],
-};
-
-export default function Poem() {
+export default function App() {
   return (
-    <article>
-      {poem.lines.map((line, i) => (
-        <Fragment key={i}>
-          {i > 0 && <hr />}
-          <p>{line}</p>
-        </Fragment>
-      ))}
-    </article>
+    <>
+      <Profile
+        person={{
+          imageId: "lrWQx8l",
+          name: "Subrahmanyan Chandrasekhar",
+        }}
+      />
+      <Profile
+        person={{
+          imageId: "MK3eW3A",
+          name: "Creola Katherine Johnson",
+        }}
+      />
+    </>
   );
 }
