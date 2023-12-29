@@ -1,42 +1,32 @@
-import { useState, useEffect } from "react";
-import StoryTray from "./StoryTray";
+import { useState } from "react";
+import { sculptureList } from "./data";
 
-let initialStories = [
-  { id: 0, label: "Ankit's Story" },
-  { id: 1, label: "Taylor's Story" },
-];
+export default function Gallery() {
+  const [index, setIndex] = useState(0);
+  const [showMore, setShowMore] = useState(false);
 
-export default function App() {
-  let [stories, setStories] = useState([...initialStories]);
-  let time = useTime();
-
-  // HACK: Prevent the memory from growing forever while you read docs.
-  // We're breaking our own rules here.
-  if (stories.length > 100) {
-    stories.length = 100;
+  function handleNextClick() {
+    setIndex(index + 1);
   }
 
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        textAlign: "center",
-      }}
-    >
-      <h2>It is {time.toLocaleTimeString()} now.</h2>
-      <StoryTray stories={stories} />
-    </div>
-  );
-}
+  function handleMoreClick() {
+    setShowMore(!showMore);
+  }
 
-function useTime() {
-  const [time, setTime] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-  return time;
+  let sculpture = sculptureList[index];
+  return (
+    <>
+      <button onClick={handleNextClick}>Next</button>
+      <h2>
+        <i>{sculpture.name} </i>
+        by {sculpture.artist}
+      </h2>
+      <h3>
+        ({index + 1} of {sculptureList.length})
+      </h3>
+      <img src={sculpture.url} alt={sculpture.alt} />
+      <button onClick={handleMoreClick}>{showMore ? "Hide" : "Show"} details</button>
+      {showMore && <p>{sculpture.description}</p>}
+    </>
+  );
 }
