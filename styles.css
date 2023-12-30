@@ -49,3 +49,9 @@ ul {
 h1 {
   margin-top: 10px;
 }
+
+label,
+textarea {
+  margin-bottom: 10px;
+  display: block;
+}
