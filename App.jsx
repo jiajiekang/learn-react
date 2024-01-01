@@ -1,65 +1,42 @@
 import { useImmer } from "use-immer";
+import Background from "./Background";
+import Box from "./Box";
 
-export default function Form() {
-  const [person, updatePerson] = useImmer({
-    name: "Niki de Saint Phalle",
-    artwork: {
-      title: "Blue Nana",
-      city: "Hamburg",
-      image: "https://i.imgur.com/Sd1AgUOm.jpg",
-    },
+const initialPosition = {
+  x: 0,
+  y: 0,
+};
+
+export default function Canvas() {
+  const [shape, updateShape] = useImmer({
+    color: "orange",
+    position: initialPosition,
   });
 
-  function handleNameChange(e) {
-    updatePerson((draft) => {
-      draft.name = e.target.value;
+  function handleMove(dx, dy) {
+    updateShape((draft) => {
+      draft.position.x += dx;
+      draft.position.y += dy;
     });
   }
 
-  function handleTitleChange(e) {
-    updatePerson((draft) => {
-      draft.artwork.title = e.target.value;
-    });
-  }
-
-  function handleCityChange(e) {
-    updatePerson((draft) => {
-      draft.artwork.city = e.target.value;
-    });
-  }
-
-  function handleImageChange(e) {
-    updatePerson((draft) => {
-      draft.artwork.image = e.target.value;
+  function handleColorChange(e) {
+    updateShape((draft) => {
+      draft.color = e.target.value;
     });
   }
 
   return (
     <>
-      <label>
-        Name:
-        <input value={person.name} onChange={handleNameChange} />
-      </label>
-      <label>
-        Title:
-        <input value={person.artwork.title} onChange={handleTitleChange} />
-      </label>
-      <label>
-        City:
-        <input value={person.artwork.city} onChange={handleCityChange} />
-      </label>
-      <label>
-        Image:
-        <input value={person.artwork.image} onChange={handleImageChange} />
-      </label>
-      <p>
-        <i>{person.artwork.title}</i>
-        {" by "}
-        {person.name}
-        <br />
-        (located in {person.artwork.city})
-      </p>
-      <img src={person.artwork.image} alt={person.artwork.title} />
+      <select value={shape.color} onChange={handleColorChange}>
+        <option value="orange">orange</option>
+        <option value="lightpink">lightpink</option>
+        <option value="aliceblue">aliceblue</option>
+      </select>
+      <Background position={initialPosition} />
+      <Box color={shape.color} position={shape.position} onMove={handleMove}>
+        Drag me!
+      </Box>
     </>
   );
 }
