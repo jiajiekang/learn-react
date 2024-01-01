@@ -50,8 +50,10 @@ h1 {
   margin-top: 10px;
 }
 
-label,
-textarea {
-  margin-bottom: 10px;
+label {
   display: block;
+}
+input {
+  margin-left: 5px;
+  margin-bottom: 5px;
 }
