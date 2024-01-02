@@ -50,6 +50,24 @@ h1 {
   margin-top: 10px;
 }
 
-.Error {
-  color: red;
+.background {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  background: #eee;
+}
+
+.background--active {
+  background: #a6b5ff;
+}
+
+.picture {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+}
+
+.picture--active {
+  border: 5px solid #a6b5ff;
 }
