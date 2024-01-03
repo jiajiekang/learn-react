@@ -1,27 +1,43 @@
 import { useState } from "react";
 
-export default function Picture() {
-  const [isActive, setIsActive] = useState(false);
+export default function FeedbackForm() {
+  const [text, setText] = useState("");
+  const [status, setStatus] = useState("typing");
 
-  let backgroundClassName = "background";
-  let pictureClassName = "picture";
-  if (isActive) {
-    pictureClassName += " picture--active";
-  } else {
-    backgroundClassName += " background--active";
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setStatus("sending");
+    await sendMessage(text);
+    setStatus("sent");
+  }
+
+  const isSending = status === "sending";
+  const isSent = status === "sent";
+
+  if (isSent) {
+    return <h1>Thanks for feedback!</h1>;
   }
 
   return (
-    <div className={backgroundClassName} onClick={() => setIsActive(false)}>
-      <img
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsActive(true);
-        }}
-        className={pictureClassName}
-        alt="Rainbow houses in Kampung Pelangi, Indonesia"
-        src="https://i.imgur.com/5qwVYb1.jpeg"
+    <form onSubmit={handleSubmit}>
+      <p>How was your stay at The Prancing Pony?</p>
+      <textarea
+        disabled={isSending}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
       />
-    </div>
+      <br />
+      <button disabled={isSending} type="submit">
+        Send
+      </button>
+      {isSending && <p>Sending...</p>}
+    </form>
   );
+}
+
+// Pretend to send a message.
+function sendMessage(text) {
+  return new Promise((resolve) => {
+    setTimeout(resolve(text), 2000);
+  });
 }
