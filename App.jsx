@@ -1,43 +1,55 @@
 import { useState } from "react";
 
-export default function FeedbackForm() {
-  const [text, setText] = useState("");
-  const [status, setStatus] = useState("typing");
+const initialItems = [
+  { title: "pretzels", id: 0 },
+  { title: "crispy seaweed", id: 1 },
+  { title: "granola bar", id: 2 },
+];
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setStatus("sending");
-    await sendMessage(text);
-    setStatus("sent");
-  }
+export default function Menu() {
+  const [items, setItems] = useState(initialItems);
+  const [selectedId, setSelectedId] = useState(0);
 
-  const isSending = status === "sending";
-  const isSent = status === "sent";
+  const selectedItem = items.find((item) => item.id === selectedId);
 
-  if (isSent) {
-    return <h1>Thanks for feedback!</h1>;
+  function handleItemChange(id, e) {
+    setItems(
+      items.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            title: e.target.value,
+          };
+        } else {
+          return item;
+        }
+      }),
+    );
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <p>How was your stay at The Prancing Pony?</p>
-      <textarea
-        disabled={isSending}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      <br />
-      <button disabled={isSending} type="submit">
-        Send
-      </button>
-      {isSending && <p>Sending...</p>}
-    </form>
+    <>
+      <h2>Whats your travel snack?</h2>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>
+            <input
+              value={item.title}
+              onChange={(e) => {
+                handleItemChange(item.id, e);
+              }}
+            />{" "}
+            <button
+              onClick={() => {
+                setSelectedId(item.id);
+              }}
+            >
+              Choose
+            </button>
+          </li>
+        ))}
+      </ul>
+      <p>You picked {selectedItem.title}.</p>
+    </>
   );
-}
-
-// Pretend to send a message.
-function sendMessage(text) {
-  return new Promise((resolve) => {
-    setTimeout(resolve(text), 2000);
-  });
 }
