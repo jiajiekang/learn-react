@@ -1,28 +1,21 @@
 import { useState } from "react";
-import { initialLetters } from "./data";
-import Letter from "./Letter";
+import { letters } from "./data.js";
+import Letter from "./Letter.js";
 
 export default function MailClient() {
-  const [letters, setLetters] = useState(initialLetters);
-  const [highlightedId, setHighlightedId] = useState(null);
+  const [selectedIds, setSelectedIds] = useState(new Set());
 
-  function handleHover(letterId) {
-    setHighlightedId(letterId);
-  }
+  const selectedCount = selectedIds.size;
 
-  function handleStar(starredId) {
-    setLetters(
-      letters.map((letter) => {
-        if (letter.id === starredId) {
-          return {
-            ...letter,
-            isStarred: !letter.isStarred,
-          };
-        } else {
-          return letter;
-        }
-      }),
-    );
+  function handleToggle(toggledId) {
+    // Create a copy (to avoid mutation).
+    const nextIds = new Set(selectedIds);
+    if (nextIds.has(toggledId)) {
+      nextIds.delete(toggledId);
+    } else {
+      nextIds.add(toggledId);
+    }
+    setSelectedIds(nextIds);
   }
 
   return (
@@ -33,11 +26,14 @@ export default function MailClient() {
           <Letter
             key={letter.id}
             letter={letter}
-            isHighlighted={letter.id === highlightedId}
-            onHover={handleHover}
-            onToggleStar={handleStar}
+            isSelected={selectedIds.has(letter.id)}
+            onToggle={handleToggle}
           />
         ))}
+        <hr />
+        <p>
+          <b>You selected {selectedCount} letters</b>
+        </p>
       </ul>
     </>
   );
