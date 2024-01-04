@@ -1,14 +1,6 @@
 import { useState } from "react";
-<<<<<<< HEAD
 import { letters } from "./data";
 import Letter from "./Letter";
-||||||| f5b9622
-import { initialLetters } from "./data";
-import Letter from "./Letter";
-=======
-import { letters } from "./data.js";
-import Letter from "./Letter.js";
->>>>>>> refs/remotes/origin/learn
 
 export default function MailClient() {
   const [selectedIds, setSelectedIds] = useState(new Set());
