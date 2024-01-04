@@ -1,40 +1,42 @@
 import { useState } from "react";
-import { letters } from "./data";
-import Letter from "./Letter";
+import { foods, filterItems } from "./data";
 
-export default function MailClient() {
-  const [selectedIds, setSelectedIds] = useState(new Set());
+export default function FilterableList() {
+  const [query, setQuery] = useState("");
+  const results = filterItems(foods, query);
 
-  const selectedCount = selectedIds.size;
-
-  function handleToggle(toggledId) {
-    // Create a copy (to avoid mutation).
-    const nextIds = new Set(selectedIds);
-    if (nextIds.has(toggledId)) {
-      nextIds.delete(toggledId);
-    } else {
-      nextIds.add(toggledId);
-    }
-    setSelectedIds(nextIds);
+  function handleChange(e) {
+    setQuery(e.target.value);
   }
 
   return (
     <>
-      <h2>Inbox</h2>
-      <ul>
-        {letters.map((letter) => (
-          <Letter
-            key={letter.id}
-            letter={letter}
-            isSelected={selectedIds.has(letter.id)}
-            onToggle={handleToggle}
-          />
-        ))}
-        <hr />
-        <p>
-          <b>You selected {selectedCount} letters</b>
-        </p>
-      </ul>
+      <SearchBar query={query} onChange={handleChange} />
+      <hr />
+      <List items={results} />
     </>
+  );
+}
+
+function SearchBar({ query, onChange }) {
+  return (
+    <label>
+      Search: <input value={query} onChange={onChange} />
+    </label>
+  );
+}
+
+function List({ items }) {
+  return (
+    <table>
+      <tbody>
+        {items.map((food) => (
+          <tr key={food.id}>
+            <td>{food.name}</td>
+            <td>{food.description}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
