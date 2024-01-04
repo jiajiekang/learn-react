@@ -1,71 +1,59 @@
 import { useState } from "react";
-import { initialTravelPlan } from "./places";
+import AddItem from "./AddItem";
+import PackingList from "./PackingList";
+
+let nextId = 3;
+const initialItems = [
+  { id: 0, title: "Warm socks", packed: true },
+  { id: 1, title: "Travel journal", packed: false },
+  { id: 2, title: "Watercolors", packed: false },
+];
 
 export default function TravelPlan() {
-  const [plan, setPlan] = useState(initialTravelPlan);
+  const [items, setItems] = useState(initialItems);
 
-  function handleComplete(parentId, childId) {
-    const parent = plan[parentId];
-    // Create a new version of the parent place
-    // that doesn't include this child ID.
-    const nextParent = {
-      ...parent,
-      childIds: parent.childIds.filter((id) => id !== childId),
-    };
-    // Update the root state object...
-    setPlan({
-      ...plan,
-      // ...so that it has the updated parent.
-      [parentId]: nextParent,
-    });
+  const total = items.length;
+  const packed = items.filter((item) => item.packed).length;
+
+  function handleAddItem(title) {
+    setItems([
+      ...items,
+      {
+        id: nextId++,
+        title: title,
+        packed: false,
+      },
+    ]);
   }
 
-  const root = plan[0];
-  const planetIds = root.childIds;
+  function handleChangeItem(nextId, nextPacked) {
+    setItems(
+      items.map((item) => {
+        if (item.id === nextId) {
+          return { ...item, packed: nextPacked };
+        } else {
+          return item;
+        }
+      }),
+    );
+  }
+
+  function handleDeleteItem(itemId) {
+    setItems(items.filter((item) => item.id !== itemId));
+  }
+
   return (
     <>
-      <h2>Places to visit</h2>
-      <ol>
-        {planetIds.map((id) => (
-          <PlaceTree
-            key={id}
-            id={id}
-            parentId={0}
-            placesById={plan}
-            onComplete={handleComplete}
-          />
-        ))}
-      </ol>
+      <AddItem onAddItem={handleAddItem} />
+      <PackingList
+        items={items}
+        onChangeItem={handleChangeItem}
+        onDeleteItem={handleDeleteItem}
+      />
+      <hr />
+      <b>
+        {packed} out of {total} packed!
+      </b>
     </>
-  );
-}
-
-function PlaceTree({ id, parentId, placesById, onComplete }) {
-  const place = placesById[id];
-  const childIds = place.childIds;
-  return (
-    <li>
-      {place.title}
-      <button
-        onClick={() => {
-          onComplete(parentId, id);
-        }}
-      >
-        Complete
-      </button>
-      {childIds.length > 0 && (
-        <ol>
-          {childIds.map((childId) => (
-            <PlaceTree
-              key={childId}
-              id={childId}
-              parentId={id}
-              placesById={placesById}
-              onComplete={onComplete}
-            />
-          ))}
-        </ol>
-      )}
-    </li>
   );
 }
