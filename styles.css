@@ -46,12 +46,17 @@ ul {
   padding-inline-start: 20px;
 }
 
-button {
+input {
   margin: 5px;
 }
 li {
   border-radius: 5px;
 }
-.highlighted {
+label {
+  width: 100%;
+  padding: 5px;
+  display: inline-block;
+}
+.selected {
   background: #d2eaff;
 }
