@@ -50,10 +50,8 @@ button {
   margin: 5px;
 }
 li {
-  list-style-type: none;
+  border-radius: 5px;
 }
-ul,
-li {
-  margin: 0;
-  padding: 0;
+.highlighted {
+  background: #d2eaff;
 }

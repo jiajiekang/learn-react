@@ -1,59 +1,44 @@
 import { useState } from "react";
-import AddItem from "./AddItem";
-import PackingList from "./PackingList";
+import { initialLetters } from "./data";
+import Letter from "./Letter";
 
-let nextId = 3;
-const initialItems = [
-  { id: 0, title: "Warm socks", packed: true },
-  { id: 1, title: "Travel journal", packed: false },
-  { id: 2, title: "Watercolors", packed: false },
-];
+export default function MailClient() {
+  const [letters, setLetters] = useState(initialLetters);
+  const [highlightedId, setHighlightedId] = useState(null);
 
-export default function TravelPlan() {
-  const [items, setItems] = useState(initialItems);
-
-  const total = items.length;
-  const packed = items.filter((item) => item.packed).length;
-
-  function handleAddItem(title) {
-    setItems([
-      ...items,
-      {
-        id: nextId++,
-        title: title,
-        packed: false,
-      },
-    ]);
+  function handleHover(letterId) {
+    setHighlightedId(letterId);
   }
 
-  function handleChangeItem(nextId, nextPacked) {
-    setItems(
-      items.map((item) => {
-        if (item.id === nextId) {
-          return { ...item, packed: nextPacked };
+  function handleStar(starredId) {
+    setLetters(
+      letters.map((letter) => {
+        if (letter.id === starredId) {
+          return {
+            ...letter,
+            isStarred: !letter.isStarred,
+          };
         } else {
-          return item;
+          return letter;
         }
       }),
     );
   }
 
-  function handleDeleteItem(itemId) {
-    setItems(items.filter((item) => item.id !== itemId));
-  }
-
   return (
     <>
-      <AddItem onAddItem={handleAddItem} />
-      <PackingList
-        items={items}
-        onChangeItem={handleChangeItem}
-        onDeleteItem={handleDeleteItem}
-      />
-      <hr />
-      <b>
-        {packed} out of {total} packed!
-      </b>
+      <h2>Inbox</h2>
+      <ul>
+        {letters.map((letter) => (
+          <Letter
+            key={letter.id}
+            letter={letter}
+            isHighlighted={letter.id === highlightedId}
+            onHover={handleHover}
+            onToggleStar={handleStar}
+          />
+        ))}
+      </ul>
     </>
   );
 }
