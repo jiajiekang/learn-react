@@ -1,42 +1,44 @@
 import { useState } from "react";
-import { foods, filterItems } from "./data";
 
-export default function FilterableList() {
-  const [query, setQuery] = useState("");
-  const results = filterItems(foods, query);
+export default function App() {
+  const [isFancy, setIsFancy] = useState(false);
+  return (
+    <div>
+      {isFancy ? <Counter isFancy={true} /> : <Counter isFancy={false} />}
+      <label>
+        <input
+          type="checkbox"
+          checked={isFancy}
+          onChange={(e) => {
+            setIsFancy(e.target.checked);
+          }}
+        />
+        Use fancy styling
+      </label>
+    </div>
+  );
+}
 
-  function handleChange(e) {
-    setQuery(e.target.value);
+function Counter({ isFancy }) {
+  const [score, setScore] = useState(0);
+  const [hover, setHover] = useState(false);
+
+  let className = "counter";
+  if (hover) {
+    className += " hover";
+  }
+  if (isFancy) {
+    className += " fancy";
   }
 
   return (
-    <>
-      <SearchBar query={query} onChange={handleChange} />
-      <hr />
-      <List items={results} />
-    </>
-  );
-}
-
-function SearchBar({ query, onChange }) {
-  return (
-    <label>
-      Search: <input value={query} onChange={onChange} />
-    </label>
-  );
-}
-
-function List({ items }) {
-  return (
-    <table>
-      <tbody>
-        {items.map((food) => (
-          <tr key={food.id}>
-            <td>{food.name}</td>
-            <td>{food.description}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div
+      className={className}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={() => setHover(false)}
+    >
+      <h1>{score}</h1>
+      <button onClick={() => setScore(score + 1)}>Add one</button>
+    </div>
   );
 }
