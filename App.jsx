@@ -1,38 +1,39 @@
 import { useState } from "react";
-import ContactList from "./ContactList";
-import EditContact from "./EditContact";
+import Contact from "./Contact";
 
-export default function ContactManager() {
-  const [contacts, setContacts] = useState(initialContacts);
-  const [selectedId, setSelectedId] = useState(0);
-  const selectedContact = contacts.find((c) => c.id === selectedId);
+export default function ContactList() {
+  const [reverse, setReverse] = useState(false);
 
-  function handleSave(updatedData) {
-    const nextContacts = contacts.map((c) => {
-      if (c.id === updatedData.id) {
-        return updatedData;
-      } else {
-        return c;
-      }
-    });
-    setContacts(nextContacts);
+  const displayedContacts = [...contacts];
+  if (reverse) {
+    displayedContacts.reverse();
   }
 
   return (
-    <div>
-      <ContactList
-        contacts={contacts}
-        selectedId={selectedId}
-        onSelect={(id) => setSelectedId(id)}
-      />
-      <hr />
-      <EditContact key={selectedId} initialData={selectedContact} onSave={handleSave} />
-    </div>
+    <>
+      <label>
+        <input
+          type="checkbox"
+          value={reverse}
+          onChange={(e) => {
+            setReverse(e.target.checked);
+          }}
+        />{" "}
+        Show in reverse order
+      </label>
+      <ul>
+        {displayedContacts.map((contact) => (
+          <li key={contact.id}>
+            <Contact contact={contact} />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
-const initialContacts = [
-  { id: 0, name: "Taylor", email: "taylor@mail.com" },
-  { id: 1, name: "Alice", email: "alice@mail.com" },
-  { id: 2, name: "Bob", email: "bob@mail.com" },
+const contacts = [
+  { id: 0, name: "Alice", email: "alice@mail.com" },
+  { id: 1, name: "Bob", email: "bob@mail.com" },
+  { id: 2, name: "Taylor", email: "taylor@mail.com" },
 ];

@@ -1,37 +1,57 @@
 import { useState } from "react";
 
-export default function EditContact({ initialData, onSave }) {
-  const [name, setName] = useState(initialData.name);
-  const [email, setEmail] = useState(initialData.email);
+export default function Gallery() {
+  const [index, setIndex] = useState(0);
+  const hasNext = index < images.length - 1;
+
+  function handleClick() {
+    if (hasNext) {
+      setIndex(index + 1);
+    } else {
+      setIndex(0);
+    }
+  }
+
+  let image = images[index];
   return (
-    <section>
-      <label>
-        Name: <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
-      <label>
-        Email:{" "}
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </label>
-      <button
-        onClick={() => {
-          const updatedData = {
-            id: initialData.id,
-            name: name,
-            email: email,
-          };
-          onSave(updatedData);
-        }}
-      >
-        Save
-      </button>
-      <button
-        onClick={() => {
-          setName(initialData.name);
-          setEmail(initialData.email);
-        }}
-      >
-        Reset
-      </button>
-    </section>
+    <>
+      <button onClick={handleClick}>Next</button>
+      <h3>
+        Image {index + 1} of {images.length}
+      </h3>
+      <img src={image.src} />
+      <p>{image.place}</p>
+    </>
   );
 }
+
+let images = [
+  {
+    place: "Penang, Malaysia",
+    src: "https://i.imgur.com/FJeJR8M.jpg",
+  },
+  {
+    place: "Lisbon, Portugal",
+    src: "https://i.imgur.com/dB2LRbj.jpg",
+  },
+  {
+    place: "Bilbao, Spain",
+    src: "https://i.imgur.com/z08o2TS.jpg",
+  },
+  {
+    place: "Valparaíso, Chile",
+    src: "https://i.imgur.com/Y3utgTi.jpg",
+  },
+  {
+    place: "Schwyz, Switzerland",
+    src: "https://i.imgur.com/JBbMpWY.jpg",
+  },
+  {
+    place: "Prague, Czechia",
+    src: "https://i.imgur.com/QwUKKmF.jpg",
+  },
+  {
+    place: "Ljubljana, Slovenia",
+    src: "https://i.imgur.com/3aIiwfm.jpg",
+  },
+];
