@@ -1,42 +1,32 @@
 import { useState } from "react";
 
-export default function App() {
-  const [isFancy, setIsFancy] = useState(false);
+export default function Scoreboard() {
+  const [isPlayerA, setIsPlayerA] = useState(true);
   return (
     <div>
-      {isFancy ? (
-        <div>
-          <Counter isFancy={true} />
-        </div>
+      {isPlayerA ? (
+        <Counter key="Taylor" person="Taylor" />
       ) : (
-        <section>
-          <Counter isFancy={false} />
-        </section>
+        <Counter key="Sarah" person="Sarah" />
       )}
-      <label>
-        <input
-          type="checkbox"
-          checked={isFancy}
-          onChange={(e) => {
-            setIsFancy(e.target.checked);
-          }}
-        />
-        Use fancy styling
-      </label>
+      <button
+        onClick={() => {
+          setIsPlayerA(!isPlayerA);
+        }}
+      >
+        Next player!
+      </button>
     </div>
   );
 }
 
-function Counter({ isFancy }) {
+function Counter({ person }) {
   const [score, setScore] = useState(0);
   const [hover, setHover] = useState(false);
 
   let className = "counter";
   if (hover) {
     className += " hover";
-  }
-  if (isFancy) {
-    className += " fancy";
   }
 
   return (
@@ -45,7 +35,9 @@ function Counter({ isFancy }) {
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => setHover(false)}
     >
-      <h1>{score}</h1>
+      <h1>
+        {person}'s score: {score}
+      </h1>
       <button onClick={() => setScore(score + 1)}>Add one</button>
     </div>
   );
