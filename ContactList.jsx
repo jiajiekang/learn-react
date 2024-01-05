@@ -1,15 +1,15 @@
-export default function ContactList({ contacts, onSelect }) {
+export default function ContactList({ contacts, selectedId, onSelect }) {
   return (
-    <section className="contact-list">
+    <section>
       <ul>
         {contacts.map((contact) => (
           <li key={contact.id}>
             <button
               onClick={() => {
-                onSelect(contact);
+                onSelect(contact.id);
               }}
             >
-              {contact.name}
+              {contact.id === selectedId ? <b>{contact.name}</b> : contact.name}
             </button>
           </li>
         ))}
