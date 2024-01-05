@@ -4,7 +4,15 @@ export default function App() {
   const [isFancy, setIsFancy] = useState(false);
   return (
     <div>
-      {isFancy ? <Counter isFancy={true} /> : <Counter isFancy={false} />}
+      {isFancy ? (
+        <div>
+          <Counter isFancy={true} />
+        </div>
+      ) : (
+        <section>
+          <Counter isFancy={false} />
+        </section>
+      )}
       <label>
         <input
           type="checkbox"
