@@ -1,39 +1,49 @@
-import { useState } from "react";
-import Contact from "./Contact";
+import { useReducer } from "react";
+import AddTask from "./AddTask";
+import TaskList from "./TaskList";
+import tasksReducer from "./tasksReducer.js";
 
-export default function ContactList() {
-  const [reverse, setReverse] = useState(false);
+export default function TaskApp() {
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 
-  const displayedContacts = [...contacts];
-  if (reverse) {
-    displayedContacts.reverse();
+  function handleAddTask(text) {
+    dispatch({
+      type: "added",
+      id: nextId++,
+      text: text,
+    });
+  }
+
+  function handleChangeTask(task) {
+    dispatch({
+      type: "changed",
+      task: task,
+    });
+  }
+
+  function handleDeleteTask(taskId) {
+    dispatch({
+      type: "deleted",
+      id: taskId,
+    });
   }
 
   return (
     <>
-      <label>
-        <input
-          type="checkbox"
-          value={reverse}
-          onChange={(e) => {
-            setReverse(e.target.checked);
-          }}
-        />{" "}
-        Show in reverse order
-      </label>
-      <ul>
-        {displayedContacts.map((contact) => (
-          <li key={contact.id}>
-            <Contact contact={contact} />
-          </li>
-        ))}
-      </ul>
+      <h1>Prague itinerary</h1>
+      <AddTask onAddTask={handleAddTask} />
+      <TaskList
+        tasks={tasks}
+        onChangeTask={handleChangeTask}
+        onDeleteTask={handleDeleteTask}
+      />
     </>
   );
 }
 
-const contacts = [
-  { id: 0, name: "Alice", email: "alice@mail.com" },
-  { id: 1, name: "Bob", email: "bob@mail.com" },
-  { id: 2, name: "Taylor", email: "taylor@mail.com" },
+let nextId = 3;
+const initialTasks = [
+  { id: 0, text: "Visit Kafka Museum", done: true },
+  { id: 1, text: "Watch a puppet show", done: false },
+  { id: 2, text: "Lennon Wall pic", done: false },
 ];
