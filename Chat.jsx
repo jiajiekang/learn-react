@@ -1,16 +1,28 @@
-import { useState } from "react";
-
-export default function Chat({ contact }) {
-  const [text, setText] = useState("");
+export default function Chat({ contact, message, dispatch }) {
   return (
     <section className="chat">
       <textarea
-        value={text}
+        value={message}
         placeholder={"Chat to " + contact.name}
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) => {
+          dispatch({
+            type: "edited_message",
+            message: e.target.value,
+          });
+        }}
       />
       <br />
-      <button>Send to {contact.email}</button>
+      <button
+        onClick={() => {
+          alert(`Sending "${message}" to ${contact.email}`);
+          dispatch({
+            type: "edited_message",
+            message: "",
+          });
+        }}
+      >
+        Send to {contact.email}
+      </button>
     </section>
   );
 }
