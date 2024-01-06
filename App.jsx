@@ -22,7 +22,7 @@ export default function Dtone() {
     { id: "pf4", checked: false, label: "External", value: "external" },
     { id: "pf5", checked: false, label: "SQL", value: "sql" },
   ]);
-  const [platform, setPlatform] = useState("");
+  const [platform, setPlatform] = useState("dvs");
   const [exIdRegex, setExIdRegx] = useState("16\\d+");
   const [externalIds, setExternalIds] = useState("");
 
@@ -39,7 +39,7 @@ export default function Dtone() {
     const handleFunc = (res) => {
       if (res.status !== 200) {
         ids = "Error";
-        throw new Error(data.result);
+        throw new Error(res.result);
       }
       const entries = Object.entries(JSON.parse(res.result));
       const result = [];
@@ -96,7 +96,6 @@ export default function Dtone() {
 
     const handleFunc = (res) => {
       if (res.status !== 200) {
-        ids = "Error";
         throw new Error(res.result);
       }
 
