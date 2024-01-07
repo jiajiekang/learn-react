@@ -46,14 +46,14 @@ ul {
   padding-inline-start: 20px;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0px 10px;
+button {
+  margin: 5px;
 }
 li {
-  margin-bottom: 10px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 20px;
-  align-items: center;
+  list-style-type: none;
+}
+ul,
+li {
+  margin: 0;
+  padding: 0;
 }
