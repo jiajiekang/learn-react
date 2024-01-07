@@ -45,3 +45,8 @@ code {
 ul {
   padding-inline-start: 20px;
 }
+
+button {
+  display: block;
+  margin: 10px;
+}
