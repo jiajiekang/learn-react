@@ -1,24 +1,60 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 
-export default function Chat() {
-  const [text, setText] = useState("");
-  const textRef = useRef(text);
+export default function CatFriends() {
+  const itemsRef = useRef(null);
 
-  function handleChange(e) {
-    setText(e.target.value);
-    textRef.current = e.target.value;
+  function scrollToId(itemId) {
+    const map = getMap();
+    const node = map.get(itemId);
+    node.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
   }
 
-  function handleSend() {
-    setTimeout(() => {
-      alert("Sending: " + textRef.current);
-    }, 3000);
+  function getMap() {
+    if (!itemsRef.current) {
+      // Initialize the Map on first usage.
+      itemsRef.current = new Map();
+    }
+    return itemsRef.current;
   }
 
   return (
     <>
-      <input value={text} onChange={handleChange} />
-      <button onClick={handleSend}>Send</button>
+      <nav>
+        <button onClick={() => scrollToId(0)}>Tom</button>
+        <button onClick={() => scrollToId(5)}>Maru</button>
+        <button onClick={() => scrollToId(9)}>Jellylorum</button>
+      </nav>
+      <div>
+        <ul>
+          {catList.map((cat) => (
+            <li
+              key={cat.id}
+              ref={(node) => {
+                const map = getMap();
+                if (node) {
+                  map.set(cat.id, node);
+                } else {
+                  map.delete(cat.id);
+                }
+              }}
+            >
+              <img src={cat.imageUrl} alt={"Cat #" + cat.id} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
+}
+
+const catList = [];
+for (let i = 0; i < 10; i++) {
+  catList.push({
+    id: i,
+    imageUrl: "https://placekitten.com/250/200?image=" + i,
+  });
 }
