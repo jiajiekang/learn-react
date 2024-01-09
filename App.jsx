@@ -1,34 +1,41 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-function VideoPlayer({ src, isPlaying }) {
-  const ref = useRef(null);
+function Playground() {
+  const [text, setText] = useState("a");
 
   useEffect(() => {
-    if (isPlaying) {
-      console.log("Calling video.play()");
-      ref.current.play();
-    } else {
-      console.log("Calling video.pause()");
-      ref.current.pause();
+    function onTimeout() {
+      console.log("⏰ " + text);
     }
-  }, [isPlaying]);
 
-  return <video ref={ref} src={src} loop playsInline />;
+    console.log('🔵 Schedule "' + text + '" log');
+    const timeoutId = setTimeout(onTimeout, 3000);
+
+    return () => {
+      console.log('🟡 Cancel "' + text + '" log');
+      clearTimeout(timeoutId);
+    };
+  }, [text]);
+
+  return (
+    <>
+      <label>
+        What to log: <input value={text} onChange={(e) => setText(e.target.value)} />
+      </label>
+      <h1>{text}</h1>
+    </>
+  );
 }
 
 export default function App() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [text, setText] = useState("");
+  const [show, setShow] = useState(false);
   return (
     <>
-      <input value={text} onChange={(e) => setText(e.target.value)} />
-      <button onClick={() => setIsPlaying(!isPlaying)}>
-        {isPlaying ? "Pause" : "Play"}
+      <button onClick={() => setShow(!show)}>
+        {show ? "Unmount" : "Mount"} the component
       </button>
-      <VideoPlayer
-        isPlaying={isPlaying}
-        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-      />
+      {show && <hr />}
+      {show && <Playground />}
     </>
   );
 }
