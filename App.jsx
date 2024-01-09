@@ -1,48 +1,38 @@
-import { useState } from "react";
-import MyInput from "./MyInput.js";
+import { useState, useEffect } from "react";
+import { fetchBio } from "./api.js";
 
-export default function Form() {
-  const [show, setShow] = useState(false);
-  const [firstName, setFirstName] = useState("Taylor");
-  const [lastName, setLastName] = useState("Swift");
-  const [upper, setUpper] = useState(false);
-  const name = firstName + " " + lastName;
+export default function Page() {
+  const [person, setPerson] = useState("Alice");
+  const [bio, setBio] = useState(null);
+  useEffect(() => {
+    let ignore = false;
+    setBio(null);
+    fetchBio(person).then((result) => {
+      if (!ignore) {
+        setBio(result);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
+  }, [person]);
+
   return (
     <>
-      <button onClick={() => setShow((s) => !s)}>{show ? "Hide" : "Show"} form</button>
-      <label>
-        <input
-          type="checkbox"
-          checked={upper}
-          onChange={(e) => setUpper(e.target.checked)}
-        />
-        Upper
-      </label>
-      <br />
+      <select
+        value={person}
+        onChange={(e) => {
+          setPerson(e.target.value);
+        }}
+      >
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Taylor">Taylor</option>
+      </select>
       <hr />
-      {show && (
-        <>
-          <label>
-            Enter your first name:
-            <MyInput
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              shouldFocus={true}
-            />
-          </label>
-          <label>
-            Enter your last name:
-            <MyInput
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              shouldFocus={false}
-            />
-          </label>
-          <p>
-            Hello, <b>{upper ? name.toUpperCase() : name}</b>
-          </p>
-        </>
-      )}
+      <p>
+        <i>{bio ?? "Loading..."}</i>
+      </p>
     </>
   );
 }
