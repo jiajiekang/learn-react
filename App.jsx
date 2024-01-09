@@ -3,26 +3,40 @@ import MyInput from "./MyInput.js";
 
 export default function Form() {
   const [show, setShow] = useState(false);
-  const [name, setName] = useState("Taylor");
+  const [firstName, setFirstName] = useState("Taylor");
+  const [lastName, setLastName] = useState("Swift");
   const [upper, setUpper] = useState(false);
+  const name = firstName + " " + lastName;
   return (
     <>
       <button onClick={() => setShow((s) => !s)}>{show ? "Hide" : "Show"} form</button>
+      <label>
+        <input
+          type="checkbox"
+          checked={upper}
+          onChange={(e) => setUpper(e.target.checked)}
+        />
+        Upper
+      </label>
       <br />
       <hr />
       {show && (
         <>
           <label>
-            Enter your name:
-            <MyInput value={name} onChange={(e) => setName(e.target.value)} />
+            Enter your first name:
+            <MyInput
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              shouldFocus={true}
+            />
           </label>
           <label>
-            <input
-              type="checkbox"
-              checked={upper}
-              onChange={(e) => setUpper(e.target.checked)}
+            Enter your last name:
+            <MyInput
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              shouldFocus={false}
             />
-            Make it uppercase
           </label>
           <p>
             Hello, <b>{upper ? name.toUpperCase() : name}</b>
