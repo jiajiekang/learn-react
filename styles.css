@@ -46,10 +46,12 @@ ul {
   padding-inline-start: 20px;
 }
 
-button {
+label {
   display: block;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
-video {
-  width: 250px;
+
+body {
+  min-height: 150px;
 }
