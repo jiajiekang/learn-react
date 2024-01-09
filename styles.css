@@ -46,36 +46,10 @@ ul {
   padding-inline-start: 20px;
 }
 
-div {
-  width: 100%;
-  overflow: hidden;
-}
-
-nav {
-  text-align: center;
-}
-
 button {
-  margin: 0.25rem;
+  display: block;
+  margin-bottom: 20px;
 }
-
-ul,
-li {
-  list-style: none;
-  white-space: nowrap;
-}
-
-li {
-  display: inline;
-  padding: 0.5rem;
-}
-
-img {
-  padding: 10px;
-  margin: -10px;
-  transition: background 0.2s linear;
-}
-
-.active {
-  background: rgba(0, 100, 150, 0.4);
+video {
+  width: 250px;
 }
